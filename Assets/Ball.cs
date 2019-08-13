@@ -6,7 +6,8 @@ public class Ball : MonoBehaviour {
     public bool WallOneHit = false;
     public bool WallTwoHit = false;
     public bool SideWallHit = false;
-    public float speed = 5f;
+    public float speed = 10f;
+	public float xDir = 1f;
 
 	// Use this for initialization
 	void Start () {
@@ -20,11 +21,12 @@ public class Ball : MonoBehaviour {
 
             GetComponent<Transform>().position = Vector3.zero;
 
-            float sx = 1;
+            //float sx = 1;
+			xDir = 1;
             float sy = Random.Range(0, 2) == 0 ? -1 : 1;
             float sz = Random.Range(0, 2) == 0 ? -1 : 1;
 
-            GetComponent<Rigidbody>().velocity = new Vector3(speed * sx, speed * sy, speed * sz);
+            GetComponent<Rigidbody>().velocity = new Vector3(speed * xDir, speed * sy, speed * sz);
             Invoke("Ball", 2);
 
             WallOneHit = false;
@@ -35,11 +37,11 @@ public class Ball : MonoBehaviour {
         {
             GetComponent<Transform>().position = Vector3.zero;
 
-            float sx = -1;
+            xDir = -1;
             float sy = Random.Range(0, 2) == 0 ? -1 : 1;
             float sz = Random.Range(0, 2) == 0 ? -1 : 1;
 
-            GetComponent<Rigidbody>().velocity = new Vector3(speed * sx, speed * sy, speed * sz);
+			GetComponent<Rigidbody>().velocity = new Vector3(speed * xDir, speed * sy, speed * sz);
             Invoke("Ball", 2);
 
             WallTwoHit = false;
@@ -110,6 +112,8 @@ public class Ball : MonoBehaviour {
     }
     // Update is called once per frame
     void Update () {
-		
+		Vector3 temp = GetComponent<Rigidbody> ().velocity;
+		xDir = (temp.x > 0) ? 1f : -1f;
+		GetComponent<Rigidbody> ().velocity = new Vector3 (speed * xDir, temp.y, temp.z);
 	}
 }
