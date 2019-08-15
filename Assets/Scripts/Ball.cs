@@ -114,7 +114,7 @@ public class Ball : MonoBehaviour {
         {
             WallOneHit = true;
             Debug.Log("Wall 1 was hit");
-			controller.GetComponent<ControllerScript> ().addScore (true);
+			controller.GetComponent<ControllerScript> ().addScore (false);
             serveBall(true);
         }
 
@@ -122,7 +122,7 @@ public class Ball : MonoBehaviour {
         {
             WallTwoHit = true;
             Debug.Log("Wall 2 was hit");
-			controller.GetComponent<ControllerScript> ().addScore (false);
+			controller.GetComponent<ControllerScript> ().addScore (true);
 			serveBall(false);
         }
 
