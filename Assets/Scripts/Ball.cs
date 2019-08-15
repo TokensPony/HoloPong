@@ -9,14 +9,35 @@ public class Ball : MonoBehaviour {
     public float speed = 10f;
 	public float xDir = 1f;
 
+	public bool inPlay = false;
+
+	public GameObject controller;
+
 	// Use this for initialization
 	void Start () {
-        serveBall();
+		demoGame();
     }
 
-    void serveBall()
+	public void startGame(){
+		inPlay = true;
+		GetComponent<Transform> ().position = Vector3.zero;
+		serveBall (true);
+	}
+
+	public void demoGame(){
+		inPlay = false;
+		GetComponent<Transform> ().position = Vector3.zero;
+		serveBall (true);
+	}
+
+	void serveBall(bool p1serve)
     {
-        if(WallOneHit)
+		GetComponent<Transform> ().position = Vector3.zero;
+		xDir = (p1serve) ? 1 : -1;
+		float sy = Random.Range(0, 2) == 0 ? -1 : 1;
+		float sz = Random.Range(0, 2) == 0 ? -1 : 1;
+		GetComponent<Rigidbody>().velocity = new Vector3(speed * xDir, speed * sy, speed * sz);
+        /*if(WallOneHit)
         {
 
             GetComponent<Transform>().position = Vector3.zero;
@@ -27,7 +48,7 @@ public class Ball : MonoBehaviour {
             float sz = Random.Range(0, 2) == 0 ? -1 : 1;
 
             GetComponent<Rigidbody>().velocity = new Vector3(speed * xDir, speed * sy, speed * sz);
-            Invoke("Ball", 2);
+            //Invoke("Ball", 2);
 
             WallOneHit = false;
 
@@ -42,20 +63,20 @@ public class Ball : MonoBehaviour {
             float sz = Random.Range(0, 2) == 0 ? -1 : 1;
 
 			GetComponent<Rigidbody>().velocity = new Vector3(speed * xDir, speed * sy, speed * sz);
-            Invoke("Ball", 2);
+            //Invoke("Ball", 2);
 
             WallTwoHit = false;
-        }
+        }*/
 
 
-        else if (SideWallHit)
+        /*else if (SideWallHit)
         {
             speed = 10f;
 
             SideWallHit = false;
-        }
+        }*/
 
-        else
+        /*else
         {
             GetComponent<Transform>().position = Vector3.zero;
 
@@ -64,8 +85,8 @@ public class Ball : MonoBehaviour {
             float sz = Random.Range(0, 2) == 0 ? -1 : 1;
 
             GetComponent<Rigidbody>().velocity = new Vector3(speed * sx, speed * sy, speed * sz);
-            Invoke("Ball", 2);
-        }
+            //Invoke("Ball", 2);
+        }*/
 
 
     }
@@ -76,44 +97,48 @@ public class Ball : MonoBehaviour {
         float sy = 0;
         float sz = 0;
 
-        serveBall();
+        //serveBall();
     }
 
     public void RestartGame(){
         Debug.Log("Reset Game was called");
         ResetBall();
-        Invoke("Ball", 1);
+        //Invoke("Ball", 1);
     }
 
     void OnCollisionEnter(Collision collision)
     {
         string hit = collision.gameObject.name;
 
-        if (string.Equals(hit, "Wall 1"))
+        if (string.Equals(hit, "Wall 1") && inPlay)
         {
             WallOneHit = true;
             Debug.Log("Wall 1 was hit");
-            RestartGame();
+			controller.GetComponent<ControllerScript> ().addScore (true);
+            serveBall(true);
         }
 
-        else if (string.Equals(hit, "Wall 2"))
+		else if (string.Equals(hit, "Wall 2")  && inPlay)
         {
             WallTwoHit = true;
             Debug.Log("Wall 2 was hit");
-            RestartGame();
+			controller.GetComponent<ControllerScript> ().addScore (false);
+			serveBall(false);
         }
 
-        else if (string.Equals(hit, "left") || string.Equals(hit, "right"))
+        /*else if (string.Equals(hit, "left") || string.Equals(hit, "right"))
         {
             SideWallHit = true;
             Debug.Log("Side wall was hit");
-        }
+        }*/
 
     }
     // Update is called once per frame
     void Update () {
-		Vector3 temp = GetComponent<Rigidbody> ().velocity;
-		xDir = (temp.x > 0) ? 1f : -1f;
-		GetComponent<Rigidbody> ().velocity = new Vector3 (speed * xDir, temp.y, temp.z);
+		//if (inPlay) {
+			Vector3 temp = GetComponent<Rigidbody> ().velocity;
+			xDir = (temp.x > 0) ? 1f : -1f;
+			GetComponent<Rigidbody> ().velocity = new Vector3 (speed * xDir, temp.y, temp.z);
+		//}
 	}
 }
