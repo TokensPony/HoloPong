@@ -126,6 +126,20 @@ public class Ball : MonoBehaviour {
 			serveBall(false);
         }
 
+		else if (string.Equals(hit, "Bump1")  && inPlay)
+		{
+			Debug.Log (GetComponent<Rigidbody>().velocity + ", " + collision.gameObject.transform.position + ", " + this.transform.position);
+			Vector3 pos = this.transform.position - collision.gameObject.transform.position;
+			Debug.Log (pos);
+		}
+
+		else if (string.Equals(hit, "Bump2")  && inPlay)
+		{
+			Debug.Log (GetComponent<Rigidbody>().velocity + ", " + collision.gameObject.transform.position + ", " + this.transform.position);
+			Vector3 pos = this.transform.position - collision.gameObject.transform.position;
+			Debug.Log (pos);
+		}
+
         /*else if (string.Equals(hit, "left") || string.Equals(hit, "right"))
         {
             SideWallHit = true;
