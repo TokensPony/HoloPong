@@ -78,4 +78,11 @@ public class ControllerScript : MonoBehaviour {
 			title.SetActive (active);
 		}
 	}
+
+	public void countdownSequence(string display){
+		foreach (GameObject timer in timerText) {
+			timer.SetActive (true);
+			timer.GetComponent<Text>().text = display;
+		}
+	}
 }
