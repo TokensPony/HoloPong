@@ -16,6 +16,7 @@ public class ControllerScript : MonoBehaviour {
 
 	public GameObject[] scoreText = new GameObject[3];
 	public GameObject[] titleText = new GameObject[3];
+	public GameObject[] timerText = new GameObject[3];
 
 	public bool gameActive = false;
 

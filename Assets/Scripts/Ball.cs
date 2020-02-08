@@ -6,7 +6,13 @@ public class Ball : MonoBehaviour {
     public bool WallOneHit = false;
     public bool WallTwoHit = false;
     public bool SideWallHit = false;
-    public float speed = 10f;
+
+	public float absoluteBaseSpeed = 8f;
+	public float baseSpeed;
+    public float activeSpeed;
+	public float speedIncrease = 1.2f;
+	public int volleyCount = 1;
+	public int rampUpLevel = 10;
 	public float xDir = 1f;
 
 	public bool inPlay = false;
@@ -25,6 +31,8 @@ public class Ball : MonoBehaviour {
 	}
 
 	public void demoGame(){
+		baseSpeed = absoluteBaseSpeed;
+		activeSpeed = absoluteBaseSpeed;
 		inPlay = false;
 		GetComponent<Transform> ().position = Vector3.zero;
 		serveBall (true);
@@ -36,63 +44,14 @@ public class Ball : MonoBehaviour {
 		xDir = (p1serve) ? 1 : -1;
 		float sy = Random.Range(0, 2) == 0 ? -1 : 1;
 		float sz = Random.Range(0, 2) == 0 ? -1 : 1;
-		GetComponent<Rigidbody>().velocity = new Vector3(speed * xDir, speed * sy, speed * sz);
-        /*if(WallOneHit)
-        {
-
-            GetComponent<Transform>().position = Vector3.zero;
-
-            //float sx = 1;
-			xDir = 1;
-            float sy = Random.Range(0, 2) == 0 ? -1 : 1;
-            float sz = Random.Range(0, 2) == 0 ? -1 : 1;
-
-            GetComponent<Rigidbody>().velocity = new Vector3(speed * xDir, speed * sy, speed * sz);
-            //Invoke("Ball", 2);
-
-            WallOneHit = false;
-
-        }
-
-        else if (WallTwoHit)
-        {
-            GetComponent<Transform>().position = Vector3.zero;
-
-            xDir = -1;
-            float sy = Random.Range(0, 2) == 0 ? -1 : 1;
-            float sz = Random.Range(0, 2) == 0 ? -1 : 1;
-
-			GetComponent<Rigidbody>().velocity = new Vector3(speed * xDir, speed * sy, speed * sz);
-            //Invoke("Ball", 2);
-
-            WallTwoHit = false;
-        }*/
-
-
-        /*else if (SideWallHit)
-        {
-            speed = 10f;
-
-            SideWallHit = false;
-        }*/
-
-        /*else
-        {
-            GetComponent<Transform>().position = Vector3.zero;
-
-            float sx = Random.Range(0, 2) == 0 ? -1 : 1;
-            float sy = Random.Range(0, 2) == 0 ? -1 : 1;
-            float sz = Random.Range(0, 2) == 0 ? -1 : 1;
-
-            GetComponent<Rigidbody>().velocity = new Vector3(speed * sx, speed * sy, speed * sz);
-            //Invoke("Ball", 2);
-        }*/
+		increaseBaseSpeed ();
+		GetComponent<Rigidbody>().velocity = new Vector3(activeSpeed * xDir, activeSpeed * sy, activeSpeed * sz);
 
 
     }
 
     void ResetBall(){
-        GetComponent<Rigidbody>().velocity = new Vector3(speed * 0, speed * 0, speed * 0);
+        GetComponent<Rigidbody>().velocity = new Vector3(activeSpeed * 0, activeSpeed * 0, activeSpeed * 0);
         float sx = 0;
         float sy = 0;
         float sz = 0;
@@ -128,6 +87,8 @@ public class Ball : MonoBehaviour {
 
 		else if (string.Equals(hit, "Bump1")  && inPlay)
 		{
+			volleyCount++;
+			increaseActiveBallactiveSpeed ();
 			Debug.Log (GetComponent<Rigidbody>().velocity + ", " + collision.gameObject.transform.position + ", " + this.transform.position);
 			Vector3 pos = this.transform.position - collision.gameObject.transform.position;
 			Debug.Log (pos);
@@ -135,6 +96,8 @@ public class Ball : MonoBehaviour {
 
 		else if (string.Equals(hit, "Bump2")  && inPlay)
 		{
+			volleyCount++;
+			increaseActiveBallactiveSpeed ();
 			Debug.Log (GetComponent<Rigidbody>().velocity + ", " + collision.gameObject.transform.position + ", " + this.transform.position);
 			Vector3 pos = this.transform.position - collision.gameObject.transform.position;
 			Debug.Log (pos);
@@ -147,12 +110,27 @@ public class Ball : MonoBehaviour {
         }*/
 
     }
+
+	public void increaseActiveBallactiveSpeed(){
+		if (volleyCount % rampUpLevel == 0) {
+			activeSpeed = baseSpeed * speedIncrease;
+			Debug.Log ("Going faster");
+		}
+	}
+
+	public void increaseBaseSpeed(){
+		if (volleyCount % rampUpLevel == 0) {
+			//volleyCount = 0;
+			baseSpeed += .5f;//speedIncrease;
+			activeSpeed = baseSpeed;
+		}
+	}
     // Update is called once per frame
     void Update () {
 		//if (inPlay) {
 			Vector3 temp = GetComponent<Rigidbody> ().velocity;
 			xDir = (temp.x > 0) ? 1f : -1f;
-			GetComponent<Rigidbody> ().velocity = new Vector3 (speed * xDir, temp.y, temp.z);
+			GetComponent<Rigidbody> ().velocity = new Vector3 (activeSpeed * xDir, temp.y, temp.z);
 		//}
 	}
 }
