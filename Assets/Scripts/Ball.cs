@@ -15,9 +15,15 @@ public class Ball : MonoBehaviour {
 	public int rampUpLevel = 10;
 	public float xDir = 1f;
 
+	public float ballStartPos =12;
+
 	public bool inPlay = false;
 
 	public GameObject controller;
+
+	public GameObject blueShadow;
+	public GameObject redShadow;
+	public int defaultLightPos = 15;
 
 	// Use this for initialization
 	void Start () {
@@ -40,10 +46,10 @@ public class Ball : MonoBehaviour {
 
 	void serveBall(bool p1serve)
     {
-		GetComponent<Transform> ().position = Vector3.zero;
+		GetComponent<Transform> ().position = (p1serve) ? new Vector3(-ballStartPos,0,0) : new Vector3(ballStartPos,0,0);
 		xDir = (p1serve) ? 1 : -1;
-		float sy = Random.Range(0, 2) == 0 ? -1 : 1;
-		float sz = Random.Range(0, 2) == 0 ? -1 : 1;
+		float sy = 0; //Random.Range(0, 2) == 0 ? -1 : 1;
+		float sz = 0;//Random.Range(0, 2) == 0 ? -1 : 1;
 		increaseBaseSpeed ();
 		GetComponent<Rigidbody>().velocity = new Vector3(activeSpeed * xDir, activeSpeed * sy, activeSpeed * sz);
 
@@ -85,7 +91,7 @@ public class Ball : MonoBehaviour {
 			serveBall(false);
         }
 
-		else if (string.Equals(hit, "Bump1")  && inPlay)
+		else if (string.Equals(hit, "RedPlayer")  && inPlay)
 		{
 			volleyCount++;
 			increaseActiveBallactiveSpeed ();
@@ -94,7 +100,7 @@ public class Ball : MonoBehaviour {
 			Debug.Log (pos);
 		}
 
-		else if (string.Equals(hit, "Bump2")  && inPlay)
+		else if (string.Equals(hit, "BluePlayer")  && inPlay)
 		{
 			volleyCount++;
 			increaseActiveBallactiveSpeed ();
@@ -132,5 +138,17 @@ public class Ball : MonoBehaviour {
 			xDir = (temp.x > 0) ? 1f : -1f;
 			GetComponent<Rigidbody> ().velocity = new Vector3 (activeSpeed * xDir, temp.y, temp.z);
 		//}
+
+		blueShadow.GetComponent<Transform> ().position = new Vector3(
+			//blueShadow.GetComponent<Transform> ().position.x,
+			defaultLightPos + (defaultLightPos - GetComponent<Transform> ().position.x) - 2.8f,
+			GetComponent<Transform> ().position.y,
+			GetComponent<Transform> ().position.z);
+
+		redShadow.GetComponent<Transform> ().position = new Vector3(
+			//redShadow.GetComponent<Transform> ().position.x,
+			-defaultLightPos - (defaultLightPos + GetComponent<Transform> ().position.x) + 2.8f,
+			GetComponent<Transform> ().position.y,
+			GetComponent<Transform> ().position.z);
 	}
 }

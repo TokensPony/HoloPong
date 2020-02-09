@@ -59,24 +59,40 @@ public class ControllerScript : MonoBehaviour {
 
 	public void startGame(){
 		gameActive = true;
-		showTitleText(false);
+		showText(titleText, false);
+		showText (timerText, true);
 		p1Score = 0;
 		p2Score = 0;
 		updateScoreText ();
-		Ball.GetComponent<Ball>().startGame();
+		Ball.SetActive(false);
+		StartCoroutine (gameCountdown());
 		//Debug.Log("This is a test");
 	}
 
 	public void endGame(){
 		gameActive = false;
-		showTitleText(true);
+		showText(titleText, true);
 		Ball.GetComponent<Ball> ().demoGame ();
 	}
 
-	public void showTitleText(bool active){
-		foreach (GameObject title in titleText) {
-			title.SetActive (active);
+	public void showText(GameObject[] textList, bool active){
+		foreach (GameObject text in textList) {
+			text.SetActive (active);
 		}
+	}
+
+	public IEnumerator gameCountdown(){
+		string[] timerTextValues = {"Get Ready", "3", "2", "1", "GO!"};
+		float count = 0;
+		while (count < timerTextValues.Length) {
+			Debug.Log (count);
+			countdownSequence (timerTextValues [(int)count]);
+			yield return new WaitForSeconds (1.0f);
+			count++;
+		}
+		showText (timerText, false);
+		Ball.SetActive (true);
+		Ball.GetComponent<Ball>().startGame();
 	}
 
 	public void countdownSequence(string display){
