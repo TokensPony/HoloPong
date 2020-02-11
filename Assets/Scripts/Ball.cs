@@ -48,8 +48,10 @@ public class Ball : MonoBehaviour {
     {
 		GetComponent<Transform> ().position = (p1serve) ? new Vector3(-ballStartPos,0,0) : new Vector3(ballStartPos,0,0);
 		xDir = (p1serve) ? 1 : -1;
-		float sy = 0; //Random.Range(0, 2) == 0 ? -1 : 1;
-		float sz = 0;//Random.Range(0, 2) == 0 ? -1 : 1;
+		//float sy = 0;
+		//float sz = 0;
+		float sy = Random.Range(0, 2) == 0 ? -1 : 1;
+		float sz = Random.Range(0, 2) == 0 ? -1 : 1;
 		increaseBaseSpeed ();
 		GetComponent<Rigidbody>().velocity = new Vector3(activeSpeed * xDir, activeSpeed * sy, activeSpeed * sz);
 
