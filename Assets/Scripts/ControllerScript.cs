@@ -32,6 +32,11 @@ public class ControllerScript : MonoBehaviour {
 			startGame ();
         }
 
+		if(Input.GetKeyDown(KeyCode.V) && gameActive && Ball.GetComponent<Ball>().waitingForVolley){
+			Debug.Log ("Volley");
+			Ball.GetComponent<Ball> ().waitingForVolley = false;
+		}
+
     }
 
 	public void addScore(bool player1){
@@ -55,6 +60,10 @@ public class ControllerScript : MonoBehaviour {
 		foreach (GameObject score in scoreText) {
 			score.GetComponent<Text> ().text = newScore;
 		}
+	}
+
+	public IEnumerator waitForVolley(bool p1serve){
+		yield return null;
 	}
 
 	public void startGame(){

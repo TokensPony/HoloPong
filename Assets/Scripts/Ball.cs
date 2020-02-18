@@ -18,6 +18,7 @@ public class Ball : MonoBehaviour {
 	public float ballStartPos =12;
 
 	public bool inPlay = false;
+	public bool waitingForVolley = false;
 
 	public GameObject controller;
 
@@ -82,7 +83,9 @@ public class Ball : MonoBehaviour {
             WallOneHit = true;
             Debug.Log("Wall 1 was hit");
 			controller.GetComponent<ControllerScript> ().addScore (false);
+			waitingForVolley = true;
             serveBall(true);
+			//StartCoroutine(Volley(true));
         }
 
 		else if (string.Equals(hit, "Wall 2")  && inPlay)
@@ -90,7 +93,9 @@ public class Ball : MonoBehaviour {
             WallTwoHit = true;
             Debug.Log("Wall 2 was hit");
 			controller.GetComponent<ControllerScript> ().addScore (true);
+			waitingForVolley = true;
 			serveBall(false);
+			//StartCoroutine(Volley(true));
         }
 
 		else if (string.Equals(hit, "RedPlayer")  && inPlay)
@@ -118,6 +123,13 @@ public class Ball : MonoBehaviour {
         }*/
 
     }
+
+	public IEnumerator Volley(bool p1serve){
+		while (waitingForVolley) {
+			yield return null;
+		}
+		serveBall (p1serve);
+	}
 
 	public void increaseActiveBallactiveSpeed(){
 		if (volleyCount % rampUpLevel == 0) {
