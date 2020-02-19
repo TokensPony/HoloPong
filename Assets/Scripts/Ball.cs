@@ -15,7 +15,7 @@ public class Ball : MonoBehaviour {
 	public int rampUpLevel = 10;
 	public float xDir = 1f;
 
-	public float ballStartPos =12;
+	public float ballStartPos =11.5f;
 
 	public bool inPlay = false;
 	public bool waitingForVolley = false;
