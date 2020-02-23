@@ -17,6 +17,7 @@ public class ControllerScript : MonoBehaviour {
 	public GameObject[] scoreText = new GameObject[3];
 	public GameObject[] titleText = new GameObject[3];
 	public GameObject[] timerText = new GameObject[3];
+	public GameObject[] serveText = new GameObject[3];
 
 	public bool gameActive = false;
 
@@ -35,6 +36,7 @@ public class ControllerScript : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.V) && gameActive && Ball.GetComponent<Ball>().waitingForVolley){
 			Debug.Log ("Volley");
 			Ball.GetComponent<Ball> ().waitingForVolley = false;
+			showText (serveText, false);
 		}
 
     }
@@ -109,5 +111,10 @@ public class ControllerScript : MonoBehaviour {
 			timer.SetActive (true);
 			timer.GetComponent<Text>().text = display;
 		}
+	}
+
+	public void toggleServeText(float player, bool setTo){
+		int index = (player == 1f) ? 0 : 1;
+		serveText [index].SetActive (setTo);
 	}
 }

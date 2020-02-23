@@ -7,7 +7,7 @@ public class Ball : MonoBehaviour {
     public bool WallTwoHit = false;
     public bool SideWallHit = false;
 
-	public float absoluteBaseSpeed = 8f;
+	public float absoluteBaseSpeed;
 	public float baseSpeed;
     public float activeSpeed;
 	public float speedIncrease = 1.2f;
@@ -51,11 +51,15 @@ public class Ball : MonoBehaviour {
 		xDir = (p1serve) ? 1 : -1;
 		//float sy = 0;
 		//float sz = 0;
-		float sy = Random.Range(0, 2) == 0 ? -1 : 1;
-		float sz = Random.Range(0, 2) == 0 ? -1 : 1;
+		float yAngle = Random.Range(1f, 2f);
+		float zAngle = Random.Range(1f, 2f);
+		float sy = Random.Range(0, 2) == 0 ? -1f * yAngle : 1f * yAngle;
+		float sz = Random.Range(0f, 2f) == 0 ? -1f*zAngle : 1f*zAngle;
+		Debug.Log ("sy = " + sy + ", " + "sz = " + sz);
 		increaseBaseSpeed ();
-		GetComponent<Rigidbody>().velocity = new Vector3(activeSpeed * xDir, activeSpeed * sy, activeSpeed * sz);
-
+		Vector3 serveVelocity = new Vector3(activeSpeed * xDir, activeSpeed * sy, activeSpeed * sz);
+		GetComponent<Rigidbody> ().velocity = serveVelocity;
+		Debug.Log ("Final Serve Vector: " + serveVelocity);
 
     }
 
@@ -77,43 +81,43 @@ public class Ball : MonoBehaviour {
     void OnCollisionEnter(Collision collision)
     {
         string hit = collision.gameObject.name;
+		Debug.Log ("Hit: " + hit);
 
         if (string.Equals(hit, "Wall 1") && inPlay)
         {
             WallOneHit = true;
-            Debug.Log("Wall 1 was hit");
+            //Debug.Log("Wall 1 was hit");
 			controller.GetComponent<ControllerScript> ().addScore (false);
 			waitingForVolley = true;
-            serveBall(true);
-			//StartCoroutine(Volley(true));
+            //serveBall(true);
+			StartCoroutine(Volley(true));
         }
 
 		else if (string.Equals(hit, "Wall 2")  && inPlay)
         {
             WallTwoHit = true;
-            Debug.Log("Wall 2 was hit");
+            //Debug.Log("Wall 2 was hit");
 			controller.GetComponent<ControllerScript> ().addScore (true);
 			waitingForVolley = true;
-			serveBall(false);
-			//StartCoroutine(Volley(true));
+			//serveBall(false);
+			StartCoroutine(Volley(false));
         }
 
 		else if (string.Equals(hit, "RedPlayer")  && inPlay)
 		{
 			volleyCount++;
 			increaseActiveBallactiveSpeed ();
-			Debug.Log (GetComponent<Rigidbody>().velocity + ", " + collision.gameObject.transform.position + ", " + this.transform.position);
 			Vector3 pos = this.transform.position - collision.gameObject.transform.position;
-			Debug.Log (pos);
+			//Debug.Log (pos);
 		}
 
 		else if (string.Equals(hit, "BluePlayer")  && inPlay)
 		{
 			volleyCount++;
 			increaseActiveBallactiveSpeed ();
-			Debug.Log (GetComponent<Rigidbody>().velocity + ", " + collision.gameObject.transform.position + ", " + this.transform.position);
+			//Debug.Log (GetComponent<Rigidbody>().velocity + ", " + collision.gameObject.transform.position + ", " + this.transform.position);
 			Vector3 pos = this.transform.position - collision.gameObject.transform.position;
-			Debug.Log (pos);
+			//Debug.Log (pos);
 		}
 
         /*else if (string.Equals(hit, "left") || string.Equals(hit, "right"))
@@ -125,6 +129,10 @@ public class Ball : MonoBehaviour {
     }
 
 	public IEnumerator Volley(bool p1serve){
+		//Game
+		controller.GetComponent<ControllerScript> ().toggleServeText(xDir, true);
+		GetComponent<Transform> ().position = (p1serve) ? new Vector3(-ballStartPos,0,0) : new Vector3(ballStartPos,0,0);
+		GetComponent<Rigidbody> ().velocity = Vector3.zero;
 		while (waitingForVolley) {
 			yield return null;
 		}
@@ -147,11 +155,17 @@ public class Ball : MonoBehaviour {
 	}
     // Update is called once per frame
     void Update () {
-		//if (inPlay) {
+		//Ball only moves during attract mode and when in play. Freezes if currently being vollied
+		if (!waitingForVolley) {
 			Vector3 temp = GetComponent<Rigidbody> ().velocity;
 			xDir = (temp.x > 0) ? 1f : -1f;
+			Debug.Log ("Update Velocity X: " + activeSpeed + "*" + xDir + "=" + activeSpeed * xDir);
 			GetComponent<Rigidbody> ().velocity = new Vector3 (activeSpeed * xDir, temp.y, temp.z);
-		//}
+		}
+
+		Debug.Log ("Ball Velocity: " + GetComponent<Rigidbody> ().velocity);
+
+
 
 		blueShadow.GetComponent<Transform> ().position = new Vector3(
 			//blueShadow.GetComponent<Transform> ().position.x,
