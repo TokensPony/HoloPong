@@ -55,7 +55,7 @@ public class Ball : MonoBehaviour {
 		float zAngle = Random.Range(1f, 2f);
 		float sy = Random.Range(0, 2) == 0 ? -1f * yAngle : 1f * yAngle;
 		float sz = Random.Range(0f, 2f) == 0 ? -1f*zAngle : 1f*zAngle;
-		Debug.Log ("sy = " + sy + ", " + "sz = " + sz);
+		//Debug.Log ("sy = " + sy + ", " + "sz = " + sz);
 		increaseBaseSpeed ();
 		Vector3 serveVelocity = new Vector3(activeSpeed * xDir, activeSpeed * sy, activeSpeed * sz);
 		GetComponent<Rigidbody> ().velocity = serveVelocity;
@@ -159,11 +159,11 @@ public class Ball : MonoBehaviour {
 		if (!waitingForVolley) {
 			Vector3 temp = GetComponent<Rigidbody> ().velocity;
 			xDir = (temp.x > 0) ? 1f : -1f;
-			Debug.Log ("Update Velocity X: " + activeSpeed + "*" + xDir + "=" + activeSpeed * xDir);
+			//Debug.Log ("Update Velocity X: " + activeSpeed + "*" + xDir + "=" + activeSpeed * xDir);
 			GetComponent<Rigidbody> ().velocity = new Vector3 (activeSpeed * xDir, temp.y, temp.z);
 		}
 
-		Debug.Log ("Ball Velocity: " + GetComponent<Rigidbody> ().velocity);
+		//Debug.Log ("Ball Velocity: " + GetComponent<Rigidbody> ().velocity);
 
 
 
