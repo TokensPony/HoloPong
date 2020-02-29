@@ -28,11 +28,19 @@ public class ControllerScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		//Main game start control. Will eventually make it require two buttons to press.
         if (Input.GetKeyDown(KeyCode.Space) && !gameActive)
         {
 			startGame ();
         }
 
+		//Key for testing serves
+		if (Input.GetKeyDown (KeyCode.T)) {
+			Ball.GetComponent<Ball> ().serveBall (true);
+		}
+
+		//Volleys the ball if the ball is the volley position
 		if(Input.GetKeyDown(KeyCode.V) && gameActive && Ball.GetComponent<Ball>().waitingForVolley){
 			Debug.Log ("Volley");
 			Ball.GetComponent<Ball> ().waitingForVolley = false;
@@ -41,6 +49,7 @@ public class ControllerScript : MonoBehaviour {
 
     }
 
+	//Adds point to score and checks if the game point has been won
 	public void addScore(bool player1){
 		if (player1) {
 			p1Score++;
@@ -84,6 +93,7 @@ public class ControllerScript : MonoBehaviour {
 		gameActive = false;
 		showText(titleText, true);
 		Ball.GetComponent<Ball> ().demoGame ();
+		Bump1.GetComponent<PowerUpController> ().reset ();
 	}
 
 	public void showText(GameObject[] textList, bool active){
@@ -92,6 +102,7 @@ public class ControllerScript : MonoBehaviour {
 		}
 	}
 
+	//Timing Routine for countdown
 	public IEnumerator gameCountdown(){
 		string[] timerTextValues = {"Get Ready", "3", "2", "1", "GO!"};
 		float count = 0;
@@ -106,6 +117,7 @@ public class ControllerScript : MonoBehaviour {
 		Ball.GetComponent<Ball>().startGame();
 	}
 
+	//Changes text of countdown UI later
 	public void countdownSequence(string display){
 		foreach (GameObject timer in timerText) {
 			timer.SetActive (true);

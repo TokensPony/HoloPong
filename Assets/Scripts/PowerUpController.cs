@@ -15,6 +15,14 @@ public class PowerUpController : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.E)) {
 			powerUp.activate ();
+			StartCoroutine (powerUp.drainUsage ());
 		}
+		if (Input.GetKeyDown (KeyCode.C)) {
+			powerUp.stopEffect();
+		}
+	}
+
+	public void reset(){
+		powerUp.resetShots ();
 	}
 }

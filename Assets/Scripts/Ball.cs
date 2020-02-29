@@ -45,19 +45,21 @@ public class Ball : MonoBehaviour {
 		serveBall (true);
 	}
 
-	void serveBall(bool p1serve)
+	public void serveBall(bool p1serve)
     {
 		GetComponent<Transform> ().position = (p1serve) ? new Vector3(-ballStartPos,0,0) : new Vector3(ballStartPos,0,0);
 		xDir = (p1serve) ? 1 : -1;
 		//float sy = 0;
 		//float sz = 0;
-		float yAngle = Random.Range(1f, 2f);
-		float zAngle = Random.Range(1f, 2f);
+		Random.seed = (int)System.DateTime.Now.Millisecond;
+		float yAngle = Random.Range(2f, 7f);
+		float zAngle = Random.Range(2f, 7f);
 		float sy = Random.Range(0, 2) == 0 ? -1f * yAngle : 1f * yAngle;
-		float sz = Random.Range(0f, 2f) == 0 ? -1f*zAngle : 1f*zAngle;
-		//Debug.Log ("sy = " + sy + ", " + "sz = " + sz);
-		increaseBaseSpeed ();
-		Vector3 serveVelocity = new Vector3(activeSpeed * xDir, activeSpeed * sy, activeSpeed * sz);
+		float sz = Random.Range(0, 2) == 0 ? -1f*zAngle : 1f*zAngle;
+		Debug.Log ("sy = " + sy + ", " + "sz = " + sz);
+
+		//Vector3 serveVelocity = new Vector3(activeSpeed * xDir, activeSpeed * sy, activeSpeed * sz);
+		Vector3 serveVelocity = new Vector3(activeSpeed * xDir, sy, sz);
 		GetComponent<Rigidbody> ().velocity = serveVelocity;
 		Debug.Log ("Final Serve Vector: " + serveVelocity);
 
@@ -81,7 +83,7 @@ public class Ball : MonoBehaviour {
     void OnCollisionEnter(Collision collision)
     {
         string hit = collision.gameObject.name;
-		Debug.Log ("Hit: " + hit);
+		//Debug.Log ("Hit: " + hit);
 
         if (string.Equals(hit, "Wall 1") && inPlay)
         {
@@ -90,7 +92,10 @@ public class Ball : MonoBehaviour {
 			controller.GetComponent<ControllerScript> ().addScore (false);
 			waitingForVolley = true;
             //serveBall(true);
-			StartCoroutine(Volley(true));
+			increaseBaseSpeed ();
+			if (inPlay) {
+				StartCoroutine (Volley (true));
+			}
         }
 
 		else if (string.Equals(hit, "Wall 2")  && inPlay)
@@ -99,8 +104,11 @@ public class Ball : MonoBehaviour {
             //Debug.Log("Wall 2 was hit");
 			controller.GetComponent<ControllerScript> ().addScore (true);
 			waitingForVolley = true;
+			increaseBaseSpeed ();
 			//serveBall(false);
-			StartCoroutine(Volley(false));
+			if (inPlay) {
+				StartCoroutine (Volley (false));
+			}
         }
 
 		else if (string.Equals(hit, "RedPlayer")  && inPlay)
@@ -160,12 +168,13 @@ public class Ball : MonoBehaviour {
 			Vector3 temp = GetComponent<Rigidbody> ().velocity;
 			xDir = (temp.x > 0) ? 1f : -1f;
 			//Debug.Log ("Update Velocity X: " + activeSpeed + "*" + xDir + "=" + activeSpeed * xDir);
-			GetComponent<Rigidbody> ().velocity = new Vector3 (activeSpeed * xDir, temp.y, temp.z);
+			Vector3 newVel = new Vector3 (activeSpeed * xDir, temp.y, temp.z);
+			//GetComponent<Rigidbody> ().velocity = newVel;
 		}
 
+		//Debug.Log (GetComponent<Rigidbody> ().velocity);
+
 		//Debug.Log ("Ball Velocity: " + GetComponent<Rigidbody> ().velocity);
-
-
 
 		blueShadow.GetComponent<Transform> ().position = new Vector3(
 			//blueShadow.GetComponent<Transform> ().position.x,

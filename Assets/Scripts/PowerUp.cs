@@ -17,6 +17,7 @@ public class PowerUp {
 	public GameObject ball;
 
 	public PowerUp(){
+		Debug.Log ("Created Power Up");
 		name = "power";
 		useDuration = 1f;
 		rechargeTime = 5f;
@@ -25,6 +26,7 @@ public class PowerUp {
 		charged = true;
 		charging = true;
 		chargeProgress = 0f;
+		ball = GameObject.Find ("Ball");
 	}
 
 	public PowerUp(string n, float uDur, float rTime, int mShots){
@@ -47,7 +49,36 @@ public class PowerUp {
 		return charged;
 	}
 
-	public virtual int shotsLeft(){
-		return shotsRemaining;
+	public virtual bool shotsLeft(){
+		if (shotsRemaining == 0) {
+			return false;
+		}
+		return true;
 	}
+
+	public IEnumerator rechargeCycle(){
+		yield return null;
+	}
+
+	public virtual IEnumerator drainUsage(){
+		float timeLeft = useDuration;
+		while (timeLeft > 0) {
+			timeLeft--;
+			yield return new WaitForSeconds (1.0f);
+		}
+		stopEffect ();
+	}
+
+	public void decreaseShot(){
+		shotsRemaining--;
+	}
+
+	public void resetShots(){
+		shotsRemaining = maxShots;
+	}
+
+	public virtual void stopEffect(){
+
+	}
+
 }
