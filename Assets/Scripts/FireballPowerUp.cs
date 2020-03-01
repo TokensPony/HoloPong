@@ -17,7 +17,7 @@ public class FireballPowerUp : PowerUp {
 	}
 
 	public override void activate(){
-		//if (shotsLeft ()) {
+		//if (shotsLeft () && gameActive()) {
 			Debug.Log ("Used Fireball");
 			Debug.Log (ball.GetComponent<Rigidbody> ().position);
 			//ball.transform.rotation = Quaternion.AngleAxis (0, Vector3.zero);
@@ -35,15 +35,15 @@ public class FireballPowerUp : PowerUp {
 		float timeLeft = useDuration;
 		while (timeLeft > 0) {
 			timeLeft--;
-			yield return new WaitForSeconds (1.0f);
+			yield return new WaitForSeconds (0.5f);
 		}
 		stopEffect ();
 	}
 
 	public override void stopEffect(){
 		Vector3 current = ball.GetComponent<Rigidbody> ().velocity;
-		Vector3 resetVel = new Vector3 (ball.GetComponent<Ball> ().activeSpeed * ball.GetComponent<Ball> ().xDir,
-			                   current.y, current.z);
+		float xVel = (current.x == 0f) ? 0f : ball.GetComponent<Ball> ().activeSpeed * ball.GetComponent<Ball> ().xDir;
+		Vector3 resetVel = new Vector3 (xVel, current.y, current.z);
 		Debug.Log ("Reset Velocity to: " + resetVel);
 		ball.GetComponent<Rigidbody> ().velocity = resetVel;
 	}

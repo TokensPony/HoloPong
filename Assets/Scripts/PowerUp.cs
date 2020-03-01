@@ -15,6 +15,7 @@ public class PowerUp {
 	public bool charging;
 	public float chargeProgress;
 	public GameObject ball;
+	public GameObject controller;
 
 	public PowerUp(){
 		Debug.Log ("Created Power Up");
@@ -27,6 +28,7 @@ public class PowerUp {
 		charging = true;
 		chargeProgress = 0f;
 		ball = GameObject.Find ("Ball");
+		controller = GameObject.Find ("GameController");
 	}
 
 	public PowerUp(string n, float uDur, float rTime, int mShots){
@@ -81,4 +83,7 @@ public class PowerUp {
 
 	}
 
+	public bool gameActive(){
+		return controller.GetComponent<ControllerScript> ().gameActive;
+	}
 }

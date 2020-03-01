@@ -47,7 +47,8 @@ public class Ball : MonoBehaviour {
 
 	public void serveBall(bool p1serve)
     {
-		GetComponent<Transform> ().position = (p1serve) ? new Vector3(-ballStartPos,0,0) : new Vector3(ballStartPos,0,0);
+		Vector3 currPos = GetComponent<Transform> ().position; 
+		currPos = (p1serve) ? new Vector3(-ballStartPos,currPos.y,currPos.z) : new Vector3(ballStartPos,currPos.y,currPos.z);
 		xDir = (p1serve) ? 1 : -1;
 		//float sy = 0;
 		//float sz = 0;
@@ -137,13 +138,16 @@ public class Ball : MonoBehaviour {
     }
 
 	public IEnumerator Volley(bool p1serve){
-		//Game
+		Transform redTrans = GameObject.Find ("RedPlayer").GetComponent<Transform> ();
+		Transform blueTrans = GameObject.Find ("BluePlayer").GetComponent<Transform> ();
 		controller.GetComponent<ControllerScript> ().toggleServeText(xDir, true);
-		GetComponent<Transform> ().position = (p1serve) ? new Vector3(-ballStartPos,0,0) : new Vector3(ballStartPos,0,0);
+		GetComponent<Transform> ().position = (p1serve) ? new Vector3(-ballStartPos,redTrans.position.y,redTrans.position.z) : new Vector3(ballStartPos,blueTrans.position.y,blueTrans.position.z);
 		GetComponent<Rigidbody> ().velocity = Vector3.zero;
+		GetComponent<Transform>().parent = (p1serve)?redTrans:blueTrans;
 		while (waitingForVolley) {
 			yield return null;
 		}
+		GetComponent<Transform> ().parent = null;
 		serveBall (p1serve);
 	}
 
@@ -170,6 +174,8 @@ public class Ball : MonoBehaviour {
 			//Debug.Log ("Update Velocity X: " + activeSpeed + "*" + xDir + "=" + activeSpeed * xDir);
 			Vector3 newVel = new Vector3 (activeSpeed * xDir, temp.y, temp.z);
 			//GetComponent<Rigidbody> ().velocity = newVel;
+		} else {
+			//Vector3 tempPos = GetComponent<Transform> ().position;
 		}
 
 		//Debug.Log (GetComponent<Rigidbody> ().velocity);

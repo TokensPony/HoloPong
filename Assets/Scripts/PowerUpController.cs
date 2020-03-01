@@ -13,7 +13,7 @@ public class PowerUpController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.E)) {
+		if (Input.GetKeyDown (KeyCode.E) && powerUp.shotsLeft() && powerUp.gameActive()) {
 			powerUp.activate ();
 			StartCoroutine (powerUp.drainUsage ());
 		}
