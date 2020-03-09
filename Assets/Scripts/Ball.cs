@@ -15,7 +15,7 @@ public class Ball : MonoBehaviour {
 	public int rampUpLevel = 10;
 	public float xDir = 1f;
 
-	public float ballStartPos =11.5f;
+	public float ballStartPos = 11.5f;
 
 	public bool inPlay = false;
 	public bool waitingForVolley = false;
@@ -47,6 +47,7 @@ public class Ball : MonoBehaviour {
 
 	public void serveBall(bool p1serve)
     {
+		//Wut??? Why did I do it like this?
 		Vector3 currPos = GetComponent<Transform> ().position; 
 		currPos = (p1serve) ? new Vector3(-ballStartPos,currPos.y,currPos.z) : new Vector3(ballStartPos,currPos.y,currPos.z);
 		xDir = (p1serve) ? 1 : -1;

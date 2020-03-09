@@ -6,18 +6,23 @@ public class BounceyBallPowerUp : PowerUp {
 
 	public BounceyBallPowerUp(){
 		name = "Bouncy Ball";
-		useDuration = 5f;
+		useDuration = 2f;
 		rechargeTime = 10f;
 		maxShots = 1;
 	}
 
-	// Use this for initialization
-	void Start () {
-		
+	public override void activate(){
+		Debug.Log ("Used Bouncey Ball");
+		ball.GetComponent<Rigidbody> ().useGravity = true;
+		decreaseShot ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	public override IEnumerator drainUsage(){
+		yield return new WaitForSeconds (useDuration);
+		stopEffect ();
+	}
+
+	public override void stopEffect(){
+		ball.GetComponent<Rigidbody> ().useGravity = false;
 	}
 }

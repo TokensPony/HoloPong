@@ -5,17 +5,19 @@ using UnityEngine;
 public class PowerUpController : MonoBehaviour {
 
 	public PowerUp powerUp;
+	public bool charged;
 
 	// Use this for initialization
 	void Start () {
 		powerUp = new FireballPowerUp ();
+		charged = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.E) && powerUp.shotsLeft() && powerUp.gameActive()) {
+		if (Input.GetKeyDown (KeyCode.E) && powerUp.shotsLeft() && powerUp.gameActive() && charged) {
 			powerUp.activate ();
-			StartCoroutine (powerUp.drainUsage ());
+			StartCoroutine (activatePowerUp());
 		}
 		if (Input.GetKeyDown (KeyCode.C)) {
 			powerUp.stopEffect();
@@ -24,5 +26,20 @@ public class PowerUpController : MonoBehaviour {
 
 	public void reset(){
 		powerUp.resetShots ();
+	}
+
+	public IEnumerator activatePowerUp(){
+		charged = false;
+		StartCoroutine(powerUp.drainUsage ());
+		yield return new WaitForSeconds (powerUp.useDuration);
+		Debug.Log ("Now REcharge");
+		StartCoroutine (recharge ());
+	}
+
+	public IEnumerator recharge(){
+		Debug.Log ("recharging");
+		yield return new WaitForSeconds (powerUp.rechargeTime);
+		charged = true;
+		Debug.Log ("Charged");
 	}
 }

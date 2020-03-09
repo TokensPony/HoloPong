@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUp {
+public class PowerUp : MonoBehaviour {
 
 	public string name;
 	public string description;

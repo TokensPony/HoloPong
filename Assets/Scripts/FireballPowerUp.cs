@@ -13,7 +13,7 @@ public class FireballPowerUp : PowerUp {
 		rechargeTime = 10f;
 		maxShots = 1;
 		shotsRemaining = maxShots;
-
+		useDuration = .5f;
 	}
 
 	public override void activate(){
@@ -26,17 +26,18 @@ public class FireballPowerUp : PowerUp {
 			Vector3 fireballVel = new Vector3 (originalVel.x + (impulsePower * dir), 0f, 0f);
 			Debug.Log ("Fireball Vel: " + fireballVel);
 			ball.GetComponent<Rigidbody> ().AddForce (fireballVel, ForceMode.Impulse);
-			decreaseShot ();
-			//drainUsage ();
+			//decreaseShot ();
+			//StartCoroutine (drainUsage ());
 		//}
 	}
 
 	public override IEnumerator drainUsage(){
-		float timeLeft = useDuration;
-		while (timeLeft > 0) {
-			timeLeft--;
-			yield return new WaitForSeconds (0.5f);
-		}
+		Debug.Log ("Draining");
+		//float timeLeft = useDuration;
+		//while (timeLeft > 0) {
+		//	timeLeft--;
+			yield return new WaitForSeconds (useDuration);
+		//}
 		stopEffect ();
 	}
 
