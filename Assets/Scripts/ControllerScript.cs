@@ -32,6 +32,7 @@ public class ControllerScript : MonoBehaviour {
 		//Main game start control. Will eventually make it require two buttons to press.
         if (Input.GetKeyDown(KeyCode.Space) && !gameActive)
         {
+			GetComponent<AudioSource> ().Play ();
 			startGame ();
         }
 
@@ -94,6 +95,7 @@ public class ControllerScript : MonoBehaviour {
 		showText(titleText, true);
 		Ball.GetComponent<Ball> ().demoGame ();
 		Bump1.GetComponent<PowerUpController> ().reset ();
+		GetComponent<AudioSource> ().Stop ();
 	}
 
 	public void showText(GameObject[] textList, bool active){

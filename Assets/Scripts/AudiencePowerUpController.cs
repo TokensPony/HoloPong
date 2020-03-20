@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerUpController : MonoBehaviour {
+public class AudiencePowerUpController : MonoBehaviour {
 
 	public bool player1;
 	public PowerUp powerUp;
@@ -10,13 +10,13 @@ public class PowerUpController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		powerUp = new FireballPowerUp ();
+		powerUp = new SmokeScreenPowerUp ();
 		charged = true;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.E) && powerUp.shotsLeft() && powerUp.gameActive() && charged) {
+		if (Input.GetKeyDown (KeyCode.M) && powerUp.shotsLeft() && powerUp.gameActive() && charged) {
 			powerUp.activate ();
 			StartCoroutine (activatePowerUp());
 		}

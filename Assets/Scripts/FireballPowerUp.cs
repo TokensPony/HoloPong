@@ -11,13 +11,14 @@ public class FireballPowerUp : PowerUp {
 		Debug.Log ("Created Fireball");
 		name = "Fireball";
 		rechargeTime = 10f;
-		maxShots = 1;
+		maxShots = 3;
 		shotsRemaining = maxShots;
 		useDuration = .5f;
 	}
 
 	public override void activate(){
 		//if (shotsLeft () && gameActive()) {
+			ball.GetComponent<ParticleSystem>().Play();
 			Debug.Log ("Used Fireball");
 			Debug.Log (ball.GetComponent<Rigidbody> ().position);
 			//ball.transform.rotation = Quaternion.AngleAxis (0, Vector3.zero);
