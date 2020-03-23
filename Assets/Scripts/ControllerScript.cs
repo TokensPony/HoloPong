@@ -19,11 +19,20 @@ public class ControllerScript : MonoBehaviour {
 	public GameObject[] timerText = new GameObject[3];
 	public GameObject[] serveText = new GameObject[3];
 
+	public AudioClip attractTheme;
+	public AudioClip mainTheme;
+
+	private AudioSource themeSource;
+	public float attractVol;
+	public float gameVol;
+
 	public bool gameActive = false;
 
 	// Use this for initialization
 	void Start () {
-		
+		themeSource = GetComponent<AudioSource> ();
+		themeSource.volume = attractVol;
+		changeTheme (attractTheme);
 	}
 	
 	// Update is called once per frame
@@ -32,7 +41,6 @@ public class ControllerScript : MonoBehaviour {
 		//Main game start control. Will eventually make it require two buttons to press.
         if (Input.GetKeyDown(KeyCode.Space) && !gameActive)
         {
-			GetComponent<AudioSource> ().Play ();
 			startGame ();
         }
 
@@ -86,6 +94,8 @@ public class ControllerScript : MonoBehaviour {
 		p2Score = 0;
 		updateScoreText ();
 		Ball.SetActive(false);
+		themeSource.volume = gameVol;
+		changeTheme (mainTheme);
 		StartCoroutine (gameCountdown());
 		//Debug.Log("This is a test");
 	}
@@ -95,7 +105,8 @@ public class ControllerScript : MonoBehaviour {
 		showText(titleText, true);
 		Ball.GetComponent<Ball> ().demoGame ();
 		Bump1.GetComponent<PowerUpController> ().reset ();
-		GetComponent<AudioSource> ().Stop ();
+		themeSource.volume = attractVol;
+		changeTheme (attractTheme);
 	}
 
 	public void showText(GameObject[] textList, bool active){
@@ -130,5 +141,12 @@ public class ControllerScript : MonoBehaviour {
 	public void toggleServeText(float player, bool setTo){
 		int index = (player == 1f) ? 0 : 1;
 		serveText [index].SetActive (setTo);
+	}
+
+	public void changeTheme(AudioClip clip){
+		float currTime = themeSource.time;
+		themeSource.clip = clip;
+		themeSource.time = currTime;
+		themeSource.Play ();
 	}
 }

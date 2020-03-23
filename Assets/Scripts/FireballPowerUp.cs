@@ -27,7 +27,7 @@ public class FireballPowerUp : PowerUp {
 			Vector3 fireballVel = new Vector3 (originalVel.x + (impulsePower * dir), 0f, 0f);
 			Debug.Log ("Fireball Vel: " + fireballVel);
 			ball.GetComponent<Rigidbody> ().AddForce (fireballVel, ForceMode.Impulse);
-			//decreaseShot ();
+			decreaseShot ();
 			//StartCoroutine (drainUsage ());
 		//}
 	}
