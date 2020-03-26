@@ -14,15 +14,23 @@ public class ControllerScript : MonoBehaviour {
 
 	public int gamePoint = 5;
 
+	public float creditsInserted;
+	public float creditsNeeded;
+	public float creditValue;
+
 	public GameObject[] scoreText = new GameObject[3];
 	public GameObject[] titleText = new GameObject[3];
 	public GameObject[] timerText = new GameObject[3];
 	public GameObject[] serveText = new GameObject[3];
+	public GameObject[] creditText = new GameObject[3];
 
 	public AudioClip attractTheme;
 	public AudioClip mainTheme;
+	public AudioClip Countdown;
+	public AudioClip coinInserted;
 
 	private AudioSource themeSource;
+	private AudioSource effectSource;
 	public float attractVol;
 	public float gameVol;
 
@@ -30,17 +38,29 @@ public class ControllerScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		themeSource = GetComponent<AudioSource> ();
+		AudioSource[] source = GetComponents<AudioSource>();
+		themeSource = source[0];
+		effectSource = source [1];
 		themeSource.volume = attractVol;
 		changeTheme (attractTheme);
+		setCreditText (makeCreditText());
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
+		if (Input.GetKeyDown (KeyCode.C)) {
+			effectSource.PlayOneShot (coinInserted);
+			creditsInserted += creditValue;
+			setCreditText (makeCreditText());
+		}
+
 		//Main game start control. Will eventually make it require two buttons to press.
-        if (Input.GetKeyDown(KeyCode.Space) && !gameActive)
+        if (Input.GetKeyDown(KeyCode.Space) && !gameActive && creditsInserted>=creditsNeeded)
         {
+			creditsInserted -= creditsNeeded;
+			setCreditText (makeCreditText());
+			showText (creditText, false);
 			startGame ();
         }
 
@@ -87,7 +107,7 @@ public class ControllerScript : MonoBehaviour {
 	}
 
 	public void startGame(){
-		gameActive = true;
+		
 		showText(titleText, false);
 		showText (timerText, true);
 		p1Score = 0;
@@ -95,7 +115,6 @@ public class ControllerScript : MonoBehaviour {
 		updateScoreText ();
 		Ball.SetActive(false);
 		themeSource.volume = gameVol;
-		changeTheme (mainTheme);
 		StartCoroutine (gameCountdown());
 		//Debug.Log("This is a test");
 	}
@@ -103,6 +122,7 @@ public class ControllerScript : MonoBehaviour {
 	public void endGame(){
 		gameActive = false;
 		showText(titleText, true);
+		showText (creditText, true);
 		Ball.GetComponent<Ball> ().demoGame ();
 		Bump1.GetComponent<PowerUpController> ().reset ();
 		themeSource.volume = attractVol;
@@ -120,14 +140,19 @@ public class ControllerScript : MonoBehaviour {
 		string[] timerTextValues = {"Get Ready", "3", "2", "1", "GO!"};
 		float count = 0;
 		while (count < timerTextValues.Length) {
+			if (count == 1) {
+				effectSource.PlayOneShot (Countdown);
+			}
 			Debug.Log (count);
 			countdownSequence (timerTextValues [(int)count]);
 			yield return new WaitForSeconds (1.0f);
 			count++;
 		}
+		changeTheme (mainTheme);
 		showText (timerText, false);
 		Ball.SetActive (true);
 		Ball.GetComponent<Ball>().startGame();
+		gameActive = true;
 	}
 
 	//Changes text of countdown UI later
@@ -148,5 +173,15 @@ public class ControllerScript : MonoBehaviour {
 		themeSource.clip = clip;
 		themeSource.time = currTime;
 		themeSource.Play ();
+	}
+
+	public void setCreditText(string text){
+		foreach (GameObject side in creditText) {
+			side.GetComponent<Text> ().text = text;
+		}
+	}
+
+	public string makeCreditText(){
+		return "Insert Credits\n" + creditsInserted.ToString ("C") + "/" + creditsNeeded.ToString ("C");
 	}
 }
