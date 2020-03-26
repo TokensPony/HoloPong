@@ -26,8 +26,16 @@ public class Ball : MonoBehaviour {
 	public GameObject redShadow;
 	public int defaultLightPos = 15;
 
+	private AudioSource ballSounds;
+	public AudioClip bounceFloor;
+	public AudioClip bounceWall;
+	public AudioClip bounceCeiling;
+	public AudioClip bouncePaddle;
+	public AudioClip bounceScore;
+
 	// Use this for initialization
 	void Start () {
+		ballSounds = GetComponent<AudioSource> ();
 		demoGame();
     }
 
@@ -87,23 +95,21 @@ public class Ball : MonoBehaviour {
         string hit = collision.gameObject.name;
 		//Debug.Log ("Hit: " + hit);
 
-        if (string.Equals(hit, "Wall 1") && inPlay)
-        {
-            WallOneHit = true;
-            //Debug.Log("Wall 1 was hit");
+		if (string.Equals (hit, "Wall 1") && inPlay) {
+			WallOneHit = true;
+			//Debug.Log("Wall 1 was hit");
+			ballSounds.PlayOneShot(bounceScore);
 			controller.GetComponent<ControllerScript> ().addScore (false);
 			waitingForVolley = true;
-            //serveBall(true);
+			//serveBall(true);
 			increaseBaseSpeed ();
 			if (inPlay) {
 				StartCoroutine (Volley (true));
 			}
-        }
-
-		else if (string.Equals(hit, "Wall 2")  && inPlay)
-        {
-            WallTwoHit = true;
-            //Debug.Log("Wall 2 was hit");
+		} else if (string.Equals (hit, "Wall 2") && inPlay) {
+			WallTwoHit = true;
+			//Debug.Log("Wall 2 was hit");
+			ballSounds.PlayOneShot(bounceScore);
 			controller.GetComponent<ControllerScript> ().addScore (true);
 			waitingForVolley = true;
 			increaseBaseSpeed ();
@@ -111,30 +117,28 @@ public class Ball : MonoBehaviour {
 			if (inPlay) {
 				StartCoroutine (Volley (false));
 			}
-        }
-
-		else if (string.Equals(hit, "RedPlayer")  && inPlay)
-		{
+		} else if (string.Equals (hit, "RedPlayer") && inPlay) {
+			ballSounds.PlayOneShot(bouncePaddle);
 			volleyCount++;
 			increaseActiveBallactiveSpeed ();
 			Vector3 pos = this.transform.position - collision.gameObject.transform.position;
 			//Debug.Log (pos);
-		}
-
-		else if (string.Equals(hit, "BluePlayer")  && inPlay)
-		{
+		} else if (string.Equals (hit, "BluePlayer") && inPlay) {
+			ballSounds.PlayOneShot(bouncePaddle);
 			volleyCount++;
 			increaseActiveBallactiveSpeed ();
 			//Debug.Log (GetComponent<Rigidbody>().velocity + ", " + collision.gameObject.transform.position + ", " + this.transform.position);
 			Vector3 pos = this.transform.position - collision.gameObject.transform.position;
 			//Debug.Log (pos);
+		} else if ((string.Equals (hit, "left") || string.Equals (hit, "right")) && inPlay) {
+			ballSounds.PlayOneShot (bounceWall);
+			Debug.Log ("Side wall was hit");
+		} else if (string.Equals (hit, "top") && inPlay) {
+			ballSounds.PlayOneShot (bounceCeiling);
 		}
-
-        /*else if (string.Equals(hit, "left") || string.Equals(hit, "right"))
-        {
-            SideWallHit = true;
-            Debug.Log("Side wall was hit");
-        }*/
+		else if (string.Equals (hit, "bottom") && inPlay) {
+			ballSounds.PlayOneShot (bounceFloor);
+		}
 
     }
 

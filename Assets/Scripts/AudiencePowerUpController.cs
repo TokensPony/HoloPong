@@ -8,8 +8,13 @@ public class AudiencePowerUpController : MonoBehaviour {
 	public PowerUp powerUp;
 	public bool charged;
 
+	public AudioSource powerupSound;
+
+
 	// Use this for initialization
 	void Start () {
+		powerupSound = GetComponent<AudioSource> ();
+
 		powerUp = new SmokeScreenPowerUp ();
 		charged = true;
 	}
@@ -18,7 +23,11 @@ public class AudiencePowerUpController : MonoBehaviour {
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.M) && powerUp.shotsLeft() && powerUp.gameActive() && charged) {
 			powerUp.activate ();
+			powerupSound.PlayOneShot (powerUp.activateSound);
 			StartCoroutine (activatePowerUp());
+		}
+		if (Input.GetKeyDown (KeyCode.M) && powerUp.gameActive () && (powerUp.shotsLeft () || charged)) {
+
 		}
 		if (Input.GetKeyDown (KeyCode.C)) {
 			powerUp.stopEffect();

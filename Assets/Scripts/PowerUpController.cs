@@ -12,8 +12,12 @@ public class PowerUpController : MonoBehaviour {
 	public int startingPowerup;
 	public Text powUpInfo;
 
+	public AudioSource powerupSound;
+
 	// Use this for initialization
 	void Start () {
+		powerupSound = GetComponent<AudioSource> ();
+
 		switch (startingPowerup) {
 		case 0:
 			Debug.Log ("Fireball chosen");
@@ -35,8 +39,13 @@ public class PowerUpController : MonoBehaviour {
 	void Update () {
 		if (((Input.GetKeyDown (KeyCode.E) && player1) || (Input.GetKeyDown (KeyCode.Keypad1) && !player1))
 			&& powerUp.shotsLeft() && powerUp.gameActive() && charged) {
+			powerupSound.PlayOneShot (powerUp.activateSound);
 			powerUp.activate ();
 			StartCoroutine (activatePowerUp());
+		}
+		if (((Input.GetKeyDown (KeyCode.E) && player1) || (Input.GetKeyDown (KeyCode.Keypad1) && !player1))
+			&& powerUp.gameActive () && (!charged || powerUp.shotsLeft ())) {
+			powerupSound.PlayOneShot (powerUp.cantUseSound);
 		}
 		if (Input.GetKeyDown (KeyCode.C)) {
 			powerUp.stopEffect();
@@ -61,6 +70,10 @@ public class PowerUpController : MonoBehaviour {
 		Debug.Log ("recharging");
 		yield return new WaitForSeconds (powerUp.rechargeTime);
 		charged = (powerUp.shotsLeft ()) ? true : false;
+		if (charged) {
+			Debug.Log ("Play Sound");
+			powerupSound.PlayOneShot (powerUp.rechargedSound);
+		}
 		updatePowerUpUI ();
 		Debug.Log ("Charged");
 	}

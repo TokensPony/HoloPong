@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class PowerUp : MonoBehaviour {
 
@@ -17,6 +18,10 @@ public class PowerUp : MonoBehaviour {
 	public GameObject ball;
 	public GameObject controller;
 
+	public AudioClip activateSound;
+	public AudioClip cantUseSound;
+	public AudioClip rechargedSound;
+
 	public PowerUp(){
 		Debug.Log ("Created Power Up");
 		name = "power";
@@ -29,6 +34,10 @@ public class PowerUp : MonoBehaviour {
 		chargeProgress = 0f;
 		ball = GameObject.Find ("Ball");
 		controller = GameObject.Find ("GameController");
+
+		activateSound = (AudioClip)AssetDatabase.LoadAssetAtPath ("Assets/Audio/Powerup Activated.wav", typeof(AudioClip));
+		cantUseSound = (AudioClip)AssetDatabase.LoadAssetAtPath ("Assets/Audio/Powerup Cannot Be Used.wav", typeof(AudioClip));
+		rechargedSound = (AudioClip)AssetDatabase.LoadAssetAtPath ("Assets/Audio/Powerup Recharged.wav", typeof(AudioClip));
 	}
 
 	public PowerUp(string n, float uDur, float rTime, int mShots){

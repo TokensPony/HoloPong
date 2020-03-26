@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class SmokeScreenPowerUp : PowerUp {
 
@@ -12,6 +13,7 @@ public class SmokeScreenPowerUp : PowerUp {
 		maxShots = 3;
 		shotsRemaining = maxShots;
 		useDuration = 10f;
+		activateSound = (AudioClip)AssetDatabase.LoadAssetAtPath ("Assets/Audio/Smokescreen.wav", typeof(AudioClip));
 	}
 	
 	// Update is called once per frame

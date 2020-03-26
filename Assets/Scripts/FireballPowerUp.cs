@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class FireballPowerUp : PowerUp {
 
@@ -14,6 +15,7 @@ public class FireballPowerUp : PowerUp {
 		maxShots = 3;
 		shotsRemaining = maxShots;
 		useDuration = .5f;
+		activateSound = (AudioClip)AssetDatabase.LoadAssetAtPath ("Assets/Audio/Fast Ball.wav", typeof(AudioClip));
 	}
 
 	public override void activate(){
