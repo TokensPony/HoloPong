@@ -52,7 +52,7 @@ public class PowerUp : MonoBehaviour {
 		//particleEffect.Emit (5);
 	}
 
-	public virtual void activate(){
+	public virtual void activate(bool player1){
 		Debug.Log ("Powerup Activated");
 	}
 

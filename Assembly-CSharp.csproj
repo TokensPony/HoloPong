@@ -65,6 +65,7 @@
      <Compile Include="Assets\Scripts\BumperScript.cs" />
      <Compile Include="Assets\Scripts\ControllerScript.cs" />
      <Compile Include="Assets\Scripts\FireballPowerUp.cs" />
+     <Compile Include="Assets\Scripts\GrowthPowerUp.cs" />
      <Compile Include="Assets\Scripts\MusicController.cs" />
      <Compile Include="Assets\Scripts\PowerUp.cs" />
      <Compile Include="Assets\Scripts\PowerUpController.cs" />

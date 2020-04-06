@@ -125,6 +125,7 @@ public class ControllerScript : MonoBehaviour {
 		showText (creditText, true);
 		Ball.GetComponent<Ball> ().demoGame ();
 		Bump1.GetComponent<PowerUpController> ().reset ();
+		Bump2.GetComponent<PowerUpController> ().reset ();
 		themeSource.volume = attractVol;
 		changeTheme (attractTheme);
 	}
@@ -183,5 +184,10 @@ public class ControllerScript : MonoBehaviour {
 
 	public string makeCreditText(){
 		return "Insert Credits\n" + creditsInserted.ToString ("C") + "/" + creditsNeeded.ToString ("C");
+	}
+
+	public void stopAllEffects(){
+		Bump1.GetComponent<PowerUpController> ().stopEffect ();
+		Bump2.GetComponent<PowerUpController> ().stopEffect ();
 	}
 }

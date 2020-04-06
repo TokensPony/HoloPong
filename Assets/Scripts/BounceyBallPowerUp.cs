@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEditor;
 
 public class BounceyBallPowerUp : PowerUp {
 
@@ -9,9 +10,11 @@ public class BounceyBallPowerUp : PowerUp {
 		useDuration = 2f;
 		rechargeTime = 10f;
 		maxShots = 1;
+		shotsRemaining = maxShots;
+		activateSound = (AudioClip)AssetDatabase.LoadAssetAtPath ("Assets/Audio/Powerup Activated.wav", typeof(AudioClip));
 	}
 
-	public override void activate(){
+	public override void activate(bool player1){
 		Debug.Log ("Used Bouncey Ball");
 		ball.GetComponent<Rigidbody> ().useGravity = true;
 		decreaseShot ();

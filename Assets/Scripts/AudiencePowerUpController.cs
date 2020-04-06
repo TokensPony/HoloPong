@@ -22,7 +22,7 @@ public class AudiencePowerUpController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown (KeyCode.M) && powerUp.shotsLeft() && powerUp.gameActive() && charged) {
-			powerUp.activate ();
+			powerUp.activate (player1);
 			powerupSound.PlayOneShot (powerUp.activateSound);
 			StartCoroutine (activatePowerUp());
 		}

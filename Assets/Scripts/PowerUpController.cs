@@ -27,6 +27,10 @@ public class PowerUpController : MonoBehaviour {
 			Debug.Log ("Bouncey Ball chosen");
 			powerUp = new BounceyBallPowerUp ();
 			break;
+		case 2:
+			Debug.Log ("Growth Chosen");
+			powerUp = new GrowthPowerUp ();
+			break;
 		default:
 			break;	
 		}
@@ -40,7 +44,7 @@ public class PowerUpController : MonoBehaviour {
 		if (((Input.GetKeyDown (KeyCode.E) && player1) || (Input.GetKeyDown (KeyCode.Keypad1) && !player1))
 			&& powerUp.shotsLeft() && powerUp.gameActive() && charged) {
 			powerupSound.PlayOneShot (powerUp.activateSound);
-			powerUp.activate ();
+			powerUp.activate (player1);
 			StartCoroutine (activatePowerUp());
 		}
 		if (((Input.GetKeyDown (KeyCode.E) && player1) || (Input.GetKeyDown (KeyCode.Keypad1) && !player1))
@@ -53,8 +57,10 @@ public class PowerUpController : MonoBehaviour {
 	}
 
 	public void reset(){
+		Debug.Log ("Reset PowerUp");
 		charged = true;
 		powerUp.resetShots ();
+		Start ();
 	}
 
 	public IEnumerator activatePowerUp(){
@@ -81,5 +87,9 @@ public class PowerUpController : MonoBehaviour {
 	public void updatePowerUpUI(){
 		powUpInfo.text = powerUp.name + ":" + powerUp.shotsRemaining;
 		powUpInfo.color = (charged) ? Color.green : Color.red;
+	}
+
+	public void stopEffect (){
+		powerUp.stopEffect ();
 	}
 }

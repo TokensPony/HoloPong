@@ -17,7 +17,7 @@ public class SmokeScreenPowerUp : PowerUp {
 	}
 	
 	// Update is called once per frame
-	public override void activate() {
+	public override void activate(bool player1) {
 		var main = controller.GetComponentInChildren<ParticleSystem> ().main;
 		main.duration = useDuration;
 		controller.GetComponentInChildren<ParticleSystem> ().Play ();

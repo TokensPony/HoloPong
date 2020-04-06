@@ -18,7 +18,7 @@ public class FireballPowerUp : PowerUp {
 		activateSound = (AudioClip)AssetDatabase.LoadAssetAtPath ("Assets/Audio/Fast Ball.wav", typeof(AudioClip));
 	}
 
-	public override void activate(){
+	public override void activate(bool player1){
 		//if (shotsLeft () && gameActive()) {
 			ball.GetComponent<ParticleSystem>().Play();
 			Debug.Log ("Used Fireball");

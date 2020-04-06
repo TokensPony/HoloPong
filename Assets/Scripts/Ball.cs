@@ -101,6 +101,7 @@ public class Ball : MonoBehaviour {
 			ballSounds.PlayOneShot(bounceScore);
 			controller.GetComponent<ControllerScript> ().addScore (false);
 			waitingForVolley = true;
+			controller.GetComponent<ControllerScript>().stopAllEffects();
 			//serveBall(true);
 			increaseBaseSpeed ();
 			if (inPlay) {
@@ -114,6 +115,7 @@ public class Ball : MonoBehaviour {
 			waitingForVolley = true;
 			increaseBaseSpeed ();
 			//serveBall(false);
+			controller.GetComponent<ControllerScript>().stopAllEffects();
 			if (inPlay) {
 				StartCoroutine (Volley (false));
 			}
