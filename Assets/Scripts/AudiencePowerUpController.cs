@@ -15,7 +15,7 @@ public class AudiencePowerUpController : MonoBehaviour {
 	void Start () {
 		powerupSound = GetComponent<AudioSource> ();
 
-		powerUp = new SmokeScreenPowerUp ();
+		powerUp = new BarrierPowerUp();//new SmokeScreenPowerUp ();
 		charged = true;
 	}
 

@@ -61,6 +61,7 @@
      <Compile Include="Assets\GameControllerScript.cs" />
      <Compile Include="Assets\Scripts\AudiencePowerUpController.cs" />
      <Compile Include="Assets\Scripts\Ball.cs" />
+     <Compile Include="Assets\Scripts\BarrierPowerUp.cs" />
      <Compile Include="Assets\Scripts\BounceyBallPowerUp.cs" />
      <Compile Include="Assets\Scripts\BumperScript.cs" />
      <Compile Include="Assets\Scripts\ControllerScript.cs" />

@@ -22,4 +22,8 @@ public class SmokeScreenPowerUp : PowerUp {
 		main.duration = useDuration;
 		controller.GetComponentInChildren<ParticleSystem> ().Play ();
 	}
+
+	public override void stopEffect(){
+		controller.GetComponentInChildren<ParticleSystem> ().Stop ();
+	}
 }
