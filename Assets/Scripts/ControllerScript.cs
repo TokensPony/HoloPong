@@ -38,6 +38,7 @@ public class ControllerScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		Random.seed = (int)System.DateTime.Now.Millisecond;
 		AudioSource[] source = GetComponents<AudioSource>();
 		themeSource = source[0];
 		effectSource = source [1];
@@ -48,6 +49,16 @@ public class ControllerScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		
+		// requires you to set up axes "Joy0X" - "Joy3X" and "Joy0Y" - "Joy3Y" in the Input Manger
+        /*for (int i = 0; i < 4; i++)
+        {
+            if (Mathf.Abs(Input.GetAxis("Joy" + i + "X")) > 0.2 ||
+                Mathf.Abs(Input.GetAxis("Joy" + i + "Y")) > 0.2)
+            {
+                Debug.Log(Input.GetJoystickNames()[i] + " is moved");
+            }
+        }*/
 
 		if (Input.GetKeyDown (KeyCode.C)) {
 			effectSource.PlayOneShot (coinInserted);
@@ -115,6 +126,8 @@ public class ControllerScript : MonoBehaviour {
 		updateScoreText ();
 		Ball.SetActive(false);
 		themeSource.volume = gameVol;
+		//Bump1.GetComponent<PowerUpController> ().selectPowerUp ((int)Random.Range(0,3));
+		//Bump2.GetComponent<PowerUpController> ().selectPowerUp ((int)Random.Range(0,3));
 		StartCoroutine (gameCountdown());
 		//Debug.Log("This is a test");
 	}

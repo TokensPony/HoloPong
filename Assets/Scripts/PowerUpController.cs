@@ -14,11 +14,37 @@ public class PowerUpController : MonoBehaviour {
 
 	public AudioSource powerupSound;
 
+	public GameObject ball;
+
 	// Use this for initialization
 	void Start () {
 		powerupSound = GetComponent<AudioSource> ();
+		ball = GameObject.Find ("Ball");
 
-		switch (startingPowerup) {
+		Random.seed = (int)System.DateTime.Now.Millisecond;
+		selectPowerUp ((int)Random.Range(0,3));
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		if (((Input.GetKeyDown (KeyCode.E) && player1) || (Input.GetKeyDown (KeyCode.Keypad1) && !player1))
+			&& powerUp.shotsLeft() && powerUp.gameActive() && charged && !ball.GetComponent<Ball>().waitingForVolley) {
+			powerupSound.PlayOneShot (powerUp.activateSound);
+			powerUp.activate (player1);
+			StartCoroutine (activatePowerUp());
+		}
+		if (((Input.GetKeyDown (KeyCode.E) && player1) || (Input.GetKeyDown (KeyCode.Keypad1) && !player1 ))
+			&& powerUp.gameActive () && (!charged || powerUp.shotsLeft () || ball.GetComponent<Ball>().waitingForVolley)) {
+			powerupSound.PlayOneShot (powerUp.cantUseSound);
+		}
+		if (Input.GetKeyDown (KeyCode.C)) {
+			powerUp.stopEffect();
+		}
+	}
+
+	public void selectPowerUp(int selection){
+
+		switch (selection) {
 		case 0:
 			Debug.Log ("Fireball chosen");
 			powerUp = new FireballPowerUp ();
@@ -38,28 +64,13 @@ public class PowerUpController : MonoBehaviour {
 		charged = true;
 		updatePowerUpUI ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (((Input.GetKeyDown (KeyCode.E) && player1) || (Input.GetKeyDown (KeyCode.Keypad1) && !player1))
-			&& powerUp.shotsLeft() && powerUp.gameActive() && charged) {
-			powerupSound.PlayOneShot (powerUp.activateSound);
-			powerUp.activate (player1);
-			StartCoroutine (activatePowerUp());
-		}
-		if (((Input.GetKeyDown (KeyCode.E) && player1) || (Input.GetKeyDown (KeyCode.Keypad1) && !player1))
-			&& powerUp.gameActive () && (!charged || powerUp.shotsLeft ())) {
-			powerupSound.PlayOneShot (powerUp.cantUseSound);
-		}
-		if (Input.GetKeyDown (KeyCode.C)) {
-			powerUp.stopEffect();
-		}
-	}
 
 	public void reset(){
 		Debug.Log ("Reset PowerUp");
 		charged = true;
 		powerUp.resetShots ();
+		//stopEffect ();
+
 		Start ();
 	}
 
