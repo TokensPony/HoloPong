@@ -8,6 +8,7 @@ public class ControllerScript : MonoBehaviour {
 	public GameObject Ball;
 	public GameObject Bump1;
 	public GameObject Bump2;
+	public GameObject Audience;
 
 	public int p1Score = 0;
 	public int p2Score = 0;
@@ -139,6 +140,7 @@ public class ControllerScript : MonoBehaviour {
 		Ball.GetComponent<Ball> ().demoGame ();
 		Bump1.GetComponent<PowerUpController> ().reset ();
 		Bump2.GetComponent<PowerUpController> ().reset ();
+		Audience.GetComponent<AudiencePowerUpController> ().reset ();
 		themeSource.volume = attractVol;
 		changeTheme (attractTheme);
 	}

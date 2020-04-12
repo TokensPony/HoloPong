@@ -10,32 +10,60 @@ public class AudiencePowerUpController : MonoBehaviour {
 
 	public AudioSource powerupSound;
 
+	public GameObject ball;
 
 	// Use this for initialization
 	void Start () {
 		powerupSound = GetComponent<AudioSource> ();
+		ball = GameObject.Find ("Ball");
 
-		powerUp = new BarrierPowerUp();//new SmokeScreenPowerUp ();
+		Random.seed = (int)System.DateTime.Now.Millisecond;
+		selectPowerUp ((int)Random.Range(0,2));
+	}
+
+	public void selectPowerUp(int selection){
+
+		switch (selection) {
+		case 0:
+			Debug.Log ("Smokescreen");
+			powerUp = new SmokeScreenPowerUp ();
+			break;
+		case 1:
+			Debug.Log ("Barrier");
+			powerUp = new BarrierPowerUp ();
+			break;
+		default:
+			break;	
+		}
+		//powerUp = new FireballPowerUp ();
 		charged = true;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown (KeyCode.M) && powerUp.shotsLeft() && powerUp.gameActive() && charged) {
+		if (Input.GetKeyDown (KeyCode.M) && powerUp.shotsLeft() && powerUp.gameActive() && charged
+			&& !ball.GetComponent<Ball>().waitingForVolley) {
 			powerUp.activate (player1);
 			powerupSound.PlayOneShot (powerUp.activateSound);
 			StartCoroutine (activatePowerUp());
 		}
-		if (Input.GetKeyDown (KeyCode.M) && powerUp.gameActive () && (powerUp.shotsLeft () || charged)) {
-
+		if (Input.GetKeyDown (KeyCode.M) && powerUp.gameActive () && (powerUp.shotsLeft () || charged
+			|| ball.GetComponent<Ball>().waitingForVolley)) {
+			powerupSound.PlayOneShot (powerUp.cantUseSound);
 		}
 		if (Input.GetKeyDown (KeyCode.C)) {
 			powerUp.stopEffect();
 		}
 	}
 
+	//SOMETHING IS NOT RESETTING FIX THIS
 	public void reset(){
+		Debug.Log ("Reset PowerUp");
+		charged = true;
 		powerUp.resetShots ();
+		//stopEffect ();
+
+		Start ();
 	}
 
 	public IEnumerator activatePowerUp(){
