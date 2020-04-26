@@ -19,6 +19,9 @@ public class BumperScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		foreach (var test in Input.GetJoystickNames()) {
+			Debug.Log (test);
+		}
 		if (devControl) {
 			devDirection = -1;
 		}
@@ -28,11 +31,12 @@ public class BumperScript : MonoBehaviour
     void Update()
     {
 		//if (!collided) {
-			if (isBump1)
-				transform.Translate (0f, Input.GetAxis ("Vertical") * speed * Time.deltaTime, Input.GetAxis ("Horizontal") * speed * Time.deltaTime * devDirection);
-			else
-				transform.Translate (0f, Input.GetAxis ("Vertical2") * speed * Time.deltaTime, Input.GetAxis ("Horizontal2") * speed * Time.deltaTime * devDirection);
-		//} else {
+		if (isBump1) {
+			transform.Translate (0f, Input.GetAxis ("Vertical2") * speed * Time.deltaTime, Input.GetAxis ("Horizontal2") * speed * Time.deltaTime * devDirection);
+		} else {
+			transform.Translate (0f, Input.GetAxis ("Vertical") * speed * Time.deltaTime, Input.GetAxis ("Horizontal") * speed * Time.deltaTime * devDirection);
+		}
+			//} else {
 		//	transform.Translate (0f, 0f, 0f);
 		//}
 

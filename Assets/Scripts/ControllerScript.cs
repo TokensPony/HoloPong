@@ -68,7 +68,7 @@ public class ControllerScript : MonoBehaviour {
 		}
 
 		//Main game start control. Will eventually make it require two buttons to press.
-        if (Input.GetKeyDown(KeyCode.Space) && !gameActive && creditsInserted>=creditsNeeded)
+		if (Input.GetKeyDown(KeyCode.Space) && !gameActive && (creditsInserted>=creditsNeeded || creditsNeeded == 0))
         {
 			creditsInserted -= creditsNeeded;
 			setCreditText (makeCreditText());
@@ -82,7 +82,8 @@ public class ControllerScript : MonoBehaviour {
 		}
 
 		//Volleys the ball if the ball is the volley position
-		if(Input.GetKeyDown(KeyCode.V) && gameActive && Ball.GetComponent<Ball>().waitingForVolley){
+		if(Input.GetKeyDown(KeyCode.Joystick1Button1) || Input.GetKeyDown(KeyCode.Joystick3Button1)
+			&& gameActive && Ball.GetComponent<Ball>().waitingForVolley){
 			Debug.Log ("Volley");
 			Ball.GetComponent<Ball> ().waitingForVolley = false;
 			showText (serveText, false);
@@ -198,7 +199,11 @@ public class ControllerScript : MonoBehaviour {
 	}
 
 	public string makeCreditText(){
-		return "Insert Credits\n" + creditsInserted.ToString ("C") + "/" + creditsNeeded.ToString ("C");
+		if (creditsNeeded > 0) {
+			return "Insert Credits\n" + creditsInserted.ToString ("C") + "/" + creditsNeeded.ToString ("C");
+		} else {
+			return  "FREEPLAY";
+		}
 	}
 
 	public void stopAllEffects(){
