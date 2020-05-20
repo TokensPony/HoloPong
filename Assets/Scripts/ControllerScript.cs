@@ -36,6 +36,9 @@ public class ControllerScript : MonoBehaviour {
 	public float gameVol;
 
 	public bool gameActive = false;
+	public bool countingDown = false;
+
+	public bool p1serve;
 
 	// Use this for initialization
 	void Start () {
@@ -68,7 +71,7 @@ public class ControllerScript : MonoBehaviour {
 		}
 
 		//Main game start control. Will eventually make it require two buttons to press.
-		if (Input.GetKeyDown(KeyCode.Space) && !gameActive && (creditsInserted>=creditsNeeded || creditsNeeded == 0))
+		if ((Input.GetKeyDown (KeyCode.E) || Input.GetKeyDown (KeyCode.Keypad1)) && !gameActive && !countingDown && (creditsInserted>=creditsNeeded || creditsNeeded == 0))
         {
 			creditsInserted -= creditsNeeded;
 			setCreditText (makeCreditText());
@@ -82,8 +85,7 @@ public class ControllerScript : MonoBehaviour {
 		}
 
 		//Volleys the ball if the ball is the volley position
-		if(Input.GetKeyDown(KeyCode.Joystick1Button1) || Input.GetKeyDown(KeyCode.Joystick3Button1)
-			&& gameActive && Ball.GetComponent<Ball>().waitingForVolley){
+		if(((Input.GetKeyDown(KeyCode.V) && p1serve) || (Input.GetKeyDown(KeyCode.B) && !p1serve)) && gameActive && Ball.GetComponent<Ball>().waitingForVolley){
 			Debug.Log ("Volley");
 			Ball.GetComponent<Ball> ().waitingForVolley = false;
 			showText (serveText, false);
@@ -154,6 +156,7 @@ public class ControllerScript : MonoBehaviour {
 
 	//Timing Routine for countdown
 	public IEnumerator gameCountdown(){
+		countingDown = true;
 		string[] timerTextValues = {"Get Ready", "3", "2", "1", "GO!"};
 		float count = 0;
 		while (count < timerTextValues.Length) {
@@ -169,6 +172,7 @@ public class ControllerScript : MonoBehaviour {
 		showText (timerText, false);
 		Ball.SetActive (true);
 		Ball.GetComponent<Ball>().startGame();
+		countingDown = false;
 		gameActive = true;
 	}
 

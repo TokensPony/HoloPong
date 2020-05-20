@@ -145,6 +145,7 @@ public class Ball : MonoBehaviour {
     }
 
 	public IEnumerator Volley(bool p1serve){
+		controller.GetComponent<ControllerScript> ().p1serve = p1serve;
 		Transform redTrans = GameObject.Find ("RedPlayer").GetComponent<Transform> ();
 		Transform blueTrans = GameObject.Find ("BluePlayer").GetComponent<Transform> ();
 		controller.GetComponent<ControllerScript> ().toggleServeText(xDir, true);

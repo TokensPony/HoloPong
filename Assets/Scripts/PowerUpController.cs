@@ -31,13 +31,13 @@ public class PowerUpController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (((Input.GetKeyDown (KeyCode.JoystickButton2) && player1) || (Input.GetKeyDown (KeyCode.Joystick3Button2) && !player1))
+		if (((Input.GetKeyDown (KeyCode.E) && player1) || (Input.GetKeyDown (KeyCode.Keypad1) && !player1))
 			&& powerUp.shotsLeft() && powerUp.gameActive() && charged && !ball.GetComponent<Ball>().waitingForVolley) {
 			powerupSound.PlayOneShot (powerUp.activateSound);
 			powerUp.activate (player1);
 			StartCoroutine (activatePowerUp());
 		}
-		if (((Input.GetKeyDown (KeyCode.JoystickButton2) && player1) || (Input.GetKeyDown (KeyCode.Joystick3Button2) && !player1 ))
+		if (((Input.GetKeyDown (KeyCode.E) && player1) || (Input.GetKeyDown (KeyCode.Keypad1) && !player1 ))
 			&& powerUp.gameActive () && (!charged || powerUp.shotsLeft () || ball.GetComponent<Ball>().waitingForVolley)) {
 			Debug.Log ("Can't use powerup");
 			powerupSound.PlayOneShot (powerUp.cantUseSound);
